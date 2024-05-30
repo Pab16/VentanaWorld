@@ -10,9 +10,12 @@ import java.util.Vector;
 
 public class ConsultaPaises2 {
 
-	Vector<String[]> lista = new Vector<String[]>();
+	private Vector<String[]> lista = new Vector<String[]>();
+	private static int id = 0;
+	private País nuevoPais;
+	
 	public ConsultaPaises2() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	/**
@@ -54,6 +57,7 @@ public class ConsultaPaises2 {
 	 */
 	public void rellenarLista(ResultSet loteDatos) throws BDException, SQLException {
 		String nombre = "", capital = "", idioma = "";
+		String idTexto;
 		while (loteDatos.next()) {
 			nombre = loteDatos.getString("Name");
 			capital = loteDatos.getString("Capital");
@@ -62,15 +66,15 @@ public class ConsultaPaises2 {
 		}
 		
 		if(nombre != "") {
-			String infoPais[] = {nombre, capital, idioma};
-			lista.add(infoPais);
+			id++;
+			nuevoPais = new País(id, nombre, capital, idioma);
 		}else {
-			throw new BDException("Country not found!");
+			throw new BDException("¡País no encontrado!");
 		}
 	}
 	
-	public Vector<String[]> getLista() {
-		return lista;
+	public País getPais() {
+		return nuevoPais;
 	}
 	
 	public void vaciarLista() {
@@ -79,14 +83,25 @@ public class ConsultaPaises2 {
 	
 	public static void main(String[] args) {
 		try {
+			int n = 10;
+			País pais;
+			pais = new País(20,"hola","hola","hola");
 			ConsultaPaises2 consulta = new ConsultaPaises2();
 			Vector<String[]> a = new Vector<String[]>();
 			consulta.consultaPais("Spain");
-			a = consulta.getLista();
-			System.out.println(a.toString());
+			System.out.println(pais.id());
+			
 			
 		} catch (BDException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
